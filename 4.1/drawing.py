@@ -8,6 +8,17 @@ Your program should also include at least one function you’ve made yourself
 import turtle
 smeg = turtle.Turtle()
 
+def draw_square(x, y):
+  smeg.speed(6.7)
+  smeg.forward(90)
+  smeg.left(90)
+  smeg.forward(90)
+  smeg.left(90)
+  smeg.forward(90)
+  smeg.left(90)
+  smeg.forward(90)
+  smeg.left(90)
+    
 while True:
     command = input("What shall I do? ")
 
@@ -28,3 +39,5 @@ while True:
     if command == "c":
         smeg.circle(67)
         
+    if command == "s":
+      	draw_square(0, 0)

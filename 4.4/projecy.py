@@ -3,15 +3,24 @@ import turtle
 turtle = turtle.Turtle()
 
 def drawTree(level, branchLength):
+  
+  
   if level > 0:
     turtle.forward(branchLength)
-    turtle.left(10)
+    turtle.left(72)
     drawTree(level-1, branchLength/1.7)
     
-    turtle.right(70)
+    turtle.left(72)
     drawTree(level-1, branchLength/1.7)
     
-    turtle.left(60)
+    turtle.left(72)
+    drawTree(level-1, branchLength/1.7)
+    
+    turtle.left(72)
+    drawTree(level-1, branchLength/1.7)
+    
+    turtle.left(72)
+    drawTree(level-1, branchLength/1.7)
     turtle.back(branchLength)
   
 turtle.speed(0)
@@ -25,3 +34,5 @@ turtle.width(3)
 turtle.shape("triangle")
 levels = input("How many levels do you want me to draw? ")
 drawTree(int(levels), 120)
+
+#colour

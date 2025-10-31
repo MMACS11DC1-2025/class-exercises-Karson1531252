@@ -1,8 +1,8 @@
-
 import turtle
 
 turtle = turtle.Turtle()
-
+x = input("Where should it start drawing on the x axis?:")
+y = input("Where should it start drawing on the y axis?:")
 def drawTree(level, branchLength):
   
   
@@ -25,7 +25,7 @@ def drawTree(level, branchLength):
     
 turtle.speed(0)
 turtle.penup()
-turtle.goto(0, -180)
+turtle.goto(x, y)
 turtle.left(90)
 turtle.pendown()
 
@@ -34,3 +34,5 @@ turtle.width(3)
 turtle.shape("triangle")
 levels = input("How many levels do you want me to draw? ")
 drawTree(int(levels), 120)
+
+#colour

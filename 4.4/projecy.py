@@ -74,3 +74,9 @@ turtle.done()  #Finish drawing
 #Ensure branch_length > 0 to avoid turtle errors.
 #Colour validation prevents invalid colour strings.
 #Recursive call counting helps verify recursion works correctly.
+
+#Peer review:
+#I tested the code and it works well. 
+#It’s easy to read and the triangles draw correctly with colours. 
+#The comments are simple and helpful.
+#-Daichi

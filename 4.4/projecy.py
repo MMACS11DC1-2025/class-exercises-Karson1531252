@@ -3,19 +3,27 @@ import turtle
 #Fractal settings with available colours and defaults
 SETTINGS = {
     "colours": ["red", "blue", "green", "purple", "orange"],  #Colours user can pick
-    "default": {"branch_length": 120, "levels": 3}  #Default branch length and recursion levels
+    "default": {"branch_length": 40, "levels": 3}  #Default branch length and recursion levels
 }
 
 #Recursive function to draw fractal triangle and count calls
-def draw_tree(t, level, branch_length, colour):
+def draw_tree(level, branch_length):
     calls = 1  #Count this recursive call
     if level > 0:  #Stop recursion at level 0
-        t.color(colour)  #Set the turtle drawing colour
-        for _ in range(3):  #Draw three sides of the triangle
-            t.forward(branch_length)  # Draw one side
-            t.left(120)  #Turn 120 degrees to next corner
-            calls += draw_tree(t, level - 1, branch_length / 1.7, colour)  #Recurse with smaller branch
-        t.back(branch_length)  #Go back to starting position
+        turtle.color(colour)  #Set the turtle drawing colour
+        turtle.forward(branch_length)
+        turtle.left(120)
+        draw_tree(level-1, branch_length/1.7)
+        
+        turtle.left(120)
+        draw_tree(level-1, branch_length/1.7)
+        
+        turtle.left(120)
+        draw_tree(level-1, branch_length/1.7)
+        turtle.back(branch_length)
+        for _ in range(3):  #Draw three sides of the fractal
+            calls += 1
+        turtle.back(branch_length)  #Go back to starting position
     return calls  #Return total calls including this one
 
 #Main program starts here
@@ -32,16 +40,16 @@ if colour not in SETTINGS["colours"]:
     colour = "red"  #Use red if invalid colour given
 
 #Set up the turtle for drawing
-t = turtle.Turtle()  #Create turtle object
-t.speed(0)  #Set drawing speed to fastest
-t.penup()  #Lift pen to move to start
-t.goto(x, y) #Move to starting position
-t.left(90)  #Face upwards
-t.pendown()  #Start drawing
-t.width(2)  #Set line thickness
+turtle = turtle.Turtle()  #Create turtle object
+turtle.speed(10)  #Set drawing speed to fastest
+turtle.penup()  #Lift pen to move to start
+turtle.goto(x, y) #Move to starting position
+turtle.left(90)  #Face upwards
+turtle.pendown()  #Start drawing
+turtle.width(2)  #Set line thickness
 
 #Draw fractal and show total recursive calls
-print("Fractal complete! Total calls:", draw_tree(t, levels, SETTINGS["default"]["branch_length"], colour))
+print("Fractal complete! Total calls:", draw_tree(levels, SETTINGS["default"]["branch_length"]))
 
 turtle.done()  #Finish drawing
 
@@ -62,9 +70,9 @@ turtle.done()  #Finish drawing
 
 #Test Cases:
 #1)x=0, y=0, levels=2, colour='red'
-#  Expected: Small triangle fractal at center, 7 recursive calls.
+#Expected: Small triangle fractal at center, 7 recursive calls.
 #2)x=-100, y=-100, levels=3, colour='blue'
-#  Expected: Larger fractal shifted to bottom-left, 22 recursive calls.
+#Expected: Larger fractal shifted to bottom-left, 22 recursive calls.
 
 #Reasonable Recursion Depth:
 #Too low (1-2): fractal is very simple and not visually interesting.

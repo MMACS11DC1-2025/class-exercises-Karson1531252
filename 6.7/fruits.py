@@ -35,8 +35,7 @@ for file in fruit_images:
     img = Image.open(file)
     avg = average_color(img)
     results.append({"name": file, "rgb": avg})
-
-# --------- DAY 2 ADDITION ---------
+    
 # Function to get user color
 def get_user_color():
     color = input("Enter a color (red, green, yellow, orange, purple): ").lower()

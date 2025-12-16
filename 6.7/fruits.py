@@ -1,97 +1,114 @@
 from PIL import Image
 
 # List of fruit images
-fruit_images = ["6.7/apple.jpg",
-                "6.7/banana.jpg",
-                "6.7/orange.jpg",
-                "6.7/grape.jpg",
-                "6.7/lemon.jpg",
-                "6.7/tomato.jpg",
-                "6.7/mango.jpg",
-                "6.7/blueberry.jpg",
-                "6.7/watermelon.jpg",
-                "6.7/kiwi.jpg"]
+fruit_images = [
+    "6.7/apple.jpg",
+    "6.7/banana.jpg",
+    "6.7/orange.jpg",
+    "6.7/grape.jpg",
+    "6.7/lemon.jpg",
+    "6.7/tomato.jpg",
+    "6.7/mango.jpg",
+    "6.7/blueberry.jpg",
+    "6.7/watermelon.jpg",
+    "6.7/kiwi.jpg"
+]
 
-# Get user colour
-usercolour = input("What colour do you like? Red, orange, yellow, green, blue or purple? ").lower().strip()
+# Ask user for favourite colour
+usercolour = input(
+    "What colour do you like? Red, orange, yellow, green, blue or purple? "
+).lower().strip()
 
-# Colour classification function
+# Function to classify pixel colour
 def colours(r, g, b):
-    if 230 < r <= 255 and 0 <= g < 50 and 0 <= b < 50:
+    if 160 < r <= 200 and g < 20 and b < 55:
         return "red"
-    elif 230 < r <= 255 and 50 <= g <= 150 and 0 <= b < 50:
+    elif 230 < r <= 255 and 50 <= g <= 150 and b < 50:
         return "orange"
-    elif 230 < r <= 255 and 230 < g <= 255 and 0 <= b < 25:
+    elif 230 < r <= 250 and 190 < g <= 220 and b < 20:
         return "yellow"
-    elif 0 <= r < 25 and 230 < g < 255 and 0 <= b < 25:
+    elif r < 210 and 170 < g <= 245 and b < 90:
         return "green"
-    elif 0 <= r < 50 and 0 <= g < 50 and 230 < b <= 255:
+    elif r < 80 and g < 100 and 110 < b <= 130:
         return "blue"
-    elif 230 < r <= 255 and 0 <= g < 50 and 230 < b <= 255:
+    elif 150 < r <= 220 and 110 < g <= 160 and 150 < b <= 220:
         return "purple"
     else:
         return "other"
 
-# Dictionary to store results
+# Dictionaries to store results
 image_matches = {}
 image_colours = {}
 
-# Loop through all images
+# Loop through images
 for image_path in fruit_images:
     print("------------------------------")
-    print("Checking image: " + image_path)
-    
-    # Open and convert to RGB
-    file = Image.open(image_path).convert("RGB")
-    fruits = file.load()
-    
-    print("Image mode: " + file.mode)
-    print("Image size: " + str(file.size))
-    
-    width = file.width
-    height = file.height
-    
-    colour_pixels = []
+    print("Checking image:", image_path)
 
-    # Count pixels that match user colour
-    for x in range(width):
-        for y in range(height):
-            Rpixel = fruits[x, y][0]
-            Gpixel = fruits[x, y][1]
-            Bpixel = fruits[x, y][2]
+    # Open image and make it smaller (simple method)
+    # Open the image file
+    image = Image.open(image_path)
 
-            pixel_colour = colours(Rpixel, Gpixel, Bpixel)
-            if pixel_colour == usercolour:
-                colour_pixels.append(fruits[x, y])
-    
-    # Determine dominant colour in this image
+    # Load the pixel data
+    pixels = image.load()
+    image = image.resize((50, 50))   # <-- SIMPLE resize added here
+
+    pixels = image.load()
+    width, height = image.size
+
+    user_colour_count = 0
     colour_count = {}
+
+    # Check every pixel
     for x in range(width):
         for y in range(height):
-            Rpixel = fruits[x, y][0]
-            Gpixel = fruits[x, y][1]
-            Bpixel = fruits[x, y][2]
+            r, g, b = pixels[x, y]
+            pixel_colour = colours(r, g, b)
 
-            pixel_colour = colours(Rpixel, Gpixel, Bpixel)
+            # Count user's chosen colour
+            if pixel_colour == usercolour:
+                user_colour_count += 1
+
+            # Count all colours
             if pixel_colour in colour_count:
                 colour_count[pixel_colour] += 1
             else:
                 colour_count[pixel_colour] = 1
 
-    dominant_colour = max(colour_count, key=colour_count.get)
-    
-    # Store results
-    image_matches[image_path] = len(colour_pixels)
-    image_colours[image_path] = dominant_colour
-    
-    print("Pixels matching user colour so far: " + str(len(colour_pixels)))
-    print("Dominant colour of image: " + dominant_colour)
+    # Find dominant colour
+    dominant_colour = None
+    max_count = 0
 
-# Print final results
-print("\nResults:")
+    for colour in colour_count:
+        count = colour_count[colour]
+        if count > max_count:
+            max_count = count
+            dominant_colour = colour
+
+    # Store results
+    image_matches[image_path] = user_colour_count
+    image_colours[image_path] = dominant_colour
+
+    print("Matching pixels:", user_colour_count)
+    print("Dominant colour:", dominant_colour)
+
+# Show final results
+print("\nFinal Results:")
 for image_path in image_matches:
-    print(image_path + ": " + str(image_matches[image_path]) + " matching pixels, dominant colour: " + image_colours[image_path])
+    print(
+        image_path,
+        "-",
+        image_matches[image_path],
+        "matching pixels, dominant colour:",
+        image_colours[image_path]
+    )
 
 # Find closest matching image
-closest_image = max(image_matches, key=image_matches.get)
-print("\nClosest matching image to your colour: " + closest_image)
+# Find top 2 matching images
+top_two = sorted(image_matches, key=image_matches.get, reverse=True)[:2]
+
+"6.7/apple.jpg" == "apples"
+for image_path in top_two:
+    print("Your favourite fruits determined by your favourite colour are " + image_path)
+
+

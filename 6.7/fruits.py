@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-from PIL import Image
-import time
-=======
 # Favourite fruit calc
 # Author: Karson Lum
 # Date : Dec 19, 2025
->>>>>>> e0199c7 (j final)
 
 from PIL import Image
 import time   # <-- ADDED for profiling
@@ -29,11 +24,7 @@ usercolour = input(
     "What colour do you like? Red, orange, yellow, green, blue or purple? "
 ).lower().strip()
 
-<<<<<<< HEAD
-# Check what colour a pixel is
-=======
 # Colour Data
->>>>>>> e0199c7 (j final)
 def colours(r, g, b):
     """
     Determines the colour category of a pixel.
@@ -64,7 +55,6 @@ def is_target_feature(r, g, b, target_colour):
 # DATA STRUCTURES
 image_matches = {}
 image_colours = {}
-master_list = []
 
 # Master list for sorting & searching
 feature_scores = []  
@@ -89,25 +79,18 @@ for image_path in fruit_images:
         for y in range(height):
             r, g, b = pixels[x, y]
 
-            if pixel_colour == usercolour:
+            # Feature detection
+            if is_target_feature(r, g, b, usercolour):
                 user_colour_count += 1
 
-            if pixel_colour in colour_count:
-                colour_count[pixel_colour] += 1
-            else:
-                colour_count[pixel_colour] = 1
+            pixel_colour = colours(r, g, b)
+            colour_count[pixel_colour] = colour_count.get(pixel_colour, 0) + 1
 
-    # Find most common colour
-    dominant_colour = None
-    max_count = 0
-    for colour in colour_count:
-        if colour_count[colour] > max_count:
-            max_count = colour_count[colour]
-            dominant_colour = colour
+    # Find dominant colour
+    dominant_colour = max(colour_count, key=colour_count.get)
 
     image_matches[image_path] = user_colour_count
     image_colours[image_path] = dominant_colour
-    master_list.append([image_path, user_colour_count])
 
     # APPEND TO MASTER LIST
     feature_scores.append((image_path, user_colour_count))
@@ -115,27 +98,25 @@ for image_path in fruit_images:
     print("Matching pixels:", user_colour_count)
     print("Dominant colour:", dominant_colour)
 
-# Stop timing
+# END TIMING & REPORT
 end_time = time.time()
 elapsed_time = end_time - start_time
-rounded_time = str(round(elapsed_time, 3))
-print("\nPixel processing time: " + rounded_time + " seconds")
 
-# Sort results
+print(f"\nPixel processing completed in {elapsed_time:.3f} seconds")
+
+# SELECTION SORT 
 def selection_sort(data):
+    """
+    Sorts list of (filename, score) using Selection Sort.
+    """
     for i in range(len(data)):
         max_index = i
         for j in range(i + 1, len(data)):
             if data[j][1] > data[max_index][1]:
                 max_index = j
         data[i], data[max_index] = data[max_index], data[i]
+    return data
 
-selection_sort(master_list)
-
-# Show top 5 images
-print("\nTop 5 images:")
-for item in master_list[:5]:
-    print(item[0], "-", item[1], "matching pixels")
 
 sorted_scores = selection_sort(feature_scores)
 
